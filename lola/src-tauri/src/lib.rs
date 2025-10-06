@@ -3,8 +3,7 @@ use chrono::{DateTime, Duration, Utc};
 use chrono_tz::Europe;
 use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
-use tauri::PhysicalPosition;
-use tauri::PhysicalSize;
+use tauri::{Emitter, PhysicalPosition, PhysicalSize};
 
 #[derive(Serialize, Deserialize)]
 pub struct TimeResponse {
@@ -45,24 +44,6 @@ impl Default for CountdownState {
     }
 }
 
-fn speak_text(text: &str) -> Result<(), String> {
-    use std::process::Command;
-
-    // Use PowerShell to speak the text
-    let output = Command::new("powershell")
-        .args(&["-Command", &format!("Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('{}');", text)])
-        .output()
-        .map_err(|e| format!("Failed to execute PowerShell TTS: {}", e))?;
-
-    if output.status.success() {
-        Ok(())
-    } else {
-        Err(format!(
-            "PowerShell TTS failed: {}",
-            String::from_utf8_lossy(&output.stderr)
-        ))
-    }
-}
 
 #[tauri::command]
 fn get_current_time() -> TimeResponse {
@@ -120,7 +101,7 @@ fn reset_countdown(state: tauri::State<Arc<Mutex<CountdownState>>>) -> Result<()
 }
 
 #[tauri::command]
-fn get_countdown_status(state: tauri::State<Arc<Mutex<CountdownState>>>) -> CountdownStatus {
+fn get_countdown_status(window: tauri::Window, state: tauri::State<Arc<Mutex<CountdownState>>>) -> CountdownStatus {
     let mut s = state.lock().unwrap();
     let status = if s.start_time.is_none() {
         "stopped".to_string()
@@ -151,9 +132,8 @@ fn get_countdown_status(state: tauri::State<Arc<Mutex<CountdownState>>>) -> Coun
 
     // Trigger TTS when countdown reaches zero (only once)
     if remaining == 0 && s.start_time.is_some() && !s.tts_triggered {
-        if let Err(e) = speak_text("countdown ended, Phantom") {
-            eprintln!("Failed to speak TTS: {}", e);
-        }
+        println!("Triggering TTS for countdown end");
+        window.emit("tts-speak", "countdown ended, Phantom").unwrap();
         s.tts_triggered = true;
     }
     CountdownStatus {

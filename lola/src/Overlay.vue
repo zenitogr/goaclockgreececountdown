@@ -47,6 +47,7 @@
 
 <script setup>
 import { invoke } from '@tauri-apps/api/core'
+import { listen } from '@tauri-apps/api/event'
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { ArrowUpLeft, ArrowUp, ArrowUpRight, ArrowLeft, ArrowRight, ArrowDownLeft, ArrowDown, ArrowDownRight, Settings } from 'lucide-vue-next'
 import Clock from './components/Clock.vue'
@@ -62,6 +63,7 @@ const windowStartY = ref(0)
 
 const settingsVisible = ref(false)
 const currentCountdown = ref({ hours: 0, minutes: 0, seconds: 0, isRunning: false })
+const unlistenTts = ref(null)
 
 const windowWidth = ref(window.innerWidth)
 const windowHeight = ref(window.innerHeight)
@@ -117,12 +119,10 @@ onMounted(async () => {
   window.addEventListener('resize', updateWindowSize)
   fetchCountdownStatus()
 
-
-})
-onMounted(() => {
-  document.addEventListener('mouseup', handleMouseUp)
-  window.addEventListener('resize', updateWindowSize)
-  fetchCountdownStatus()
+  // Listen for TTS events
+  unlistenTts.value = await listen('tts-speak', (event) => {
+    window.speechSynthesis.speak(new SpeechSynthesisUtterance(event.payload));
+  });
 })
 
 const pinTo = async (position) => {
@@ -190,6 +190,9 @@ const pinTo = async (position) => {
 onUnmounted(() => {
   document.removeEventListener('mouseup', handleMouseUp)
   window.removeEventListener('resize', updateWindowSize)
+  if (unlistenTts.value) {
+    unlistenTts.value();
+  }
 })
 </script>
 
