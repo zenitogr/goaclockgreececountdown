@@ -1,6 +1,6 @@
 <template>
-  <div class="modal-overlay" @click="closeModal" v-if="isVisible">
-    <div class="modal-content" @click.stop>
+  <div class="modal-overlay" @click="closeModal" v-if="isVisible" :class="{ hovered: isHovered }">
+    <div class="modal-content" @click.stop :class="{ hovered: isHovered }">
       <div class="settings-section">
         <div class="time-setting">
           <label>Hours:</label>
@@ -36,8 +36,8 @@
   </div>
 
   <!-- Confirmation Modal for Close Overlay -->
-  <div class="modal-overlay" @click="cancelCloseOverlay" v-if="showConfirmClose">
-    <div class="confirm-modal" @click.stop>
+  <div class="modal-overlay" @click="cancelCloseOverlay" v-if="showConfirmClose" :class="{ hovered: isHovered }">
+    <div class="confirm-modal" @click.stop :class="{ hovered: isHovered }">
       <p>Are you sure you want to close the overlay?</p>
       <div class="confirm-buttons">
         <button @click="closeOverlay">Yes</button>
@@ -56,7 +56,8 @@ const props = defineProps({
   currentHours: Number,
   currentMinutes: Number,
   currentSeconds: Number,
-  isRunning: Boolean
+  isRunning: Boolean,
+  isHovered: Boolean
 })
 
 const emit = defineEmits(['close', 'updateSettings'])
@@ -163,7 +164,7 @@ watch(() => props.isVisible, async (newVal) => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(15, 15, 35, 0.4);
+  background: rgba(15, 15, 35, 0.25);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   display: flex;
@@ -175,7 +176,7 @@ watch(() => props.isVisible, async (newVal) => {
 }
 
 .modal-content {
-  background: rgba(15, 15, 35, 0.8);
+  background: rgba(15, 15, 35, 0.25);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   color: #e0f6ff;
@@ -190,6 +191,14 @@ watch(() => props.isVisible, async (newVal) => {
               inset 0 1px 0 rgba(255, 255, 255, 0.05);
   font-size: 16px;
   animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-overlay.hovered {
+  background: rgba(15, 15, 35, 0.4);
+}
+
+.modal-content.hovered {
+  background: rgba(15, 15, 35, 0.4);
 }
 
 .settings-section {
@@ -365,7 +374,7 @@ button:focus-visible {
 }
 
 .confirm-modal {
-  background: rgba(15, 15, 35, 0.8);
+  background: rgba(15, 15, 35, 0.25);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   color: #e0f6ff;
@@ -380,6 +389,10 @@ button:focus-visible {
               0 16px 32px rgba(0, 0, 0, 0.3),
               inset 0 1px 0 rgba(255, 255, 255, 0.05);
   animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.confirm-modal.hovered {
+  background: rgba(15, 15, 35, 0.4);
 }
 
 .confirm-modal p {

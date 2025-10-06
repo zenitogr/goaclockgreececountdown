@@ -16,16 +16,16 @@
         </linearGradient>
       </defs>
       <!-- Seconds circle (outermost) -->
-      <circle cx="50" cy="50" :r="secondsRadius" fill="none" stroke="url(#clockSecondsGradient)" stroke-width="1" :stroke-dasharray="secondsDashArray" stroke-dashoffset="0" opacity="0.8" transform="rotate(-90 50 50)" class="clock-circle"/>
+      <circle cx="50" cy="50" :r="secondsRadius" fill="none" stroke="url(#clockSecondsGradient)" stroke-width="1" :stroke-dasharray="secondsDashArray" stroke-dashoffset="0" transform="rotate(-90 50 50)" class="clock-circle"/>
       <!-- Minutes circle (middle) -->
-      <circle cx="50" cy="50" :r="minutesRadius" fill="none" stroke="url(#clockMinutesGradient)" stroke-width="2" :stroke-dasharray="minutesDashArray" stroke-dashoffset="0" opacity="0.85" transform="rotate(-90 50 50)" class="clock-circle"/>
+      <circle cx="50" cy="50" :r="minutesRadius" fill="none" stroke="url(#clockMinutesGradient)" stroke-width="2" :stroke-dasharray="minutesDashArray" stroke-dashoffset="0" transform="rotate(-90 50 50)" class="clock-circle"/>
       <!-- Hours circle (innermost) -->
-      <circle cx="50" cy="50" :r="hoursRadius" fill="none" stroke="url(#clockHoursGradient)" stroke-width="4" :stroke-dasharray="hoursDashArray" stroke-dashoffset="0" opacity="0.9" transform="rotate(-90 50 50)" class="clock-circle"/>
+      <circle cx="50" cy="50" :r="hoursRadius" fill="none" stroke="url(#clockHoursGradient)" stroke-width="4" :stroke-dasharray="hoursDashArray" stroke-dashoffset="0" transform="rotate(-90 50 50)" class="clock-circle"/>
       <!-- Roman numerals positioned outside the hours circle -->
-      <text :x="50" :y="50 - (hoursRadius - 12)" text-anchor="middle" fill="#e0f6ff" opacity="0.9" font-size="10" font-family="serif" font-weight="bold" class="clock-numeral">XII</text>
-      <text :x="50 + (hoursRadius -10 )" :y="50 + 3" text-anchor="middle" fill="#e0f6ff" opacity="0.9" font-size="10" font-family="serif" font-weight="bold" class="clock-numeral">III</text>
-      <text :x="50" :y="50 + (hoursRadius-10 ) + 3" text-anchor="middle" fill="#e0f6ff" opacity="0.9" font-size="10" font-family="serif" font-weight="bold" class="clock-numeral">VI</text>
-      <text :x="50 - (hoursRadius -8)" :y="50 + 3" text-anchor="middle" fill="#e0f6ff" opacity="0.9" font-size="10" font-family="serif" font-weight="bold" class="clock-numeral">IX</text>
+      <text :x="50" :y="50 - (hoursRadius - 12)" text-anchor="middle" fill="#e0f6ff" opacity="1" font-size="10" font-family="serif" font-weight="bold" class="clock-numeral">XII</text>
+      <text :x="50 + (hoursRadius -10 )" :y="50 + 3" text-anchor="middle" fill="#e0f6ff" opacity="1" font-size="10" font-family="serif" font-weight="bold" class="clock-numeral">III</text>
+      <text :x="50" :y="50 + (hoursRadius-10 ) + 3" text-anchor="middle" fill="#e0f6ff" opacity="1" font-size="10" font-family="serif" font-weight="bold" class="clock-numeral">VI</text>
+      <text :x="50 - (hoursRadius -8)" :y="50 + 3" text-anchor="middle" fill="#e0f6ff" opacity="1" font-size="10" font-family="serif" font-weight="bold" class="clock-numeral">IX</text>
     </svg>
     <div class="time-display">
       <div class="time-line">{{ hoursMinutes }}</div>
@@ -125,7 +125,7 @@ onUnmounted(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   color: #e0f6ff;
-  opacity: 0.9;
+  opacity: 1;
   font-size: 20px;
   font-weight: bold;
   font-family: 'JetBrains Mono', 'Fira Code', monospace;

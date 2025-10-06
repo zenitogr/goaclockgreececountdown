@@ -111,6 +111,21 @@ const handleMouseUp = () => {
   isDragging.value = false
 }
 
+onMounted(async () => {
+  document.addEventListener('mouseup', handleMouseUp)
+  window.addEventListener('resize', updateWindowSize)
+  fetchCountdownStatus()
+
+  // Debug: Check window transparency
+  try {
+    const { getCurrentWindow } = await import('@tauri-apps/api/window')
+    const window = getCurrentWindow()
+    const isTransparent = await window.isTransparent()
+    console.log('Window is transparent:', isTransparent)
+  } catch (e) {
+    console.error('Error checking transparency:', e)
+  }
+})
 onMounted(() => {
   document.addEventListener('mouseup', handleMouseUp)
   window.addEventListener('resize', updateWindowSize)
@@ -190,8 +205,7 @@ html, body {
   overflow: hidden;
   margin: 0;
   padding: 0;
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f0f23 75%, #1a1a2e 100%);
-  background-attachment: fixed;
+  background: transparent;
 }
 </style>
 
@@ -211,10 +225,10 @@ html, body {
   position: absolute;
   width: 44px;
   height: 44px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 50%;
   color: #e0f6ff;
   cursor: pointer;
@@ -296,25 +310,25 @@ html, body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: linear-gradient(135deg, rgba(64, 224, 208, 0.15), rgba(100, 149, 237, 0.15));
-  border-color: rgba(64, 224, 208, 0.3);
+  background: linear-gradient(135deg, rgba(64, 224, 208, 0.06), rgba(100, 149, 237, 0.06));
+  border-color: rgba(64, 224, 208, 0.07);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4),
               0 6px 20px rgba(0, 0, 0, 0.3),
               inset 0 2px 0 rgba(255, 255, 255, 0.15);
 }
 
 .pin-btn.settings-btn:hover {
-  background: linear-gradient(135deg, rgba(64, 224, 208, 0.3), rgba(100, 149, 237, 0.3));
-  border-color: rgba(64, 224, 208, 0.6);
+  background: linear-gradient(135deg, rgba(64, 224, 208, 0.2), rgba(100, 149, 237, 0.2));
+  border-color: rgba(64, 224, 208, 0.4);
 }
 
 .clock-area {
   position: absolute;
   top: 2vh;
-  left: 2vw;
+  left: 0vw;
   width: 50%;
   height: calc(100% - 2vh);
-  background: rgba(15, 15, 35, 0.3);
+  background: rgba(15, 15, 35, 0.08);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -333,10 +347,10 @@ html, body {
 .countdown-area {
   position: absolute;
   top: 2vh;
-  right: 2vw;
+  right: 0;
   width: 50%;
   height: calc(100% - 2vh);
-  background: rgba(15, 15, 35, 0.3);
+  background: rgba(15, 15, 35, 0.08);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);

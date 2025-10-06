@@ -123,9 +123,9 @@ onUnmounted(() => {
       <circle v-if="isFinished" cx="50" cy="50" r="36" fill="rgba(15, 15, 35, 0.9)" stroke="none" class="finished-minutes" />
       <circle v-if="isFinished" cx="50" cy="50" r="32" fill="url(#finishedGlow)" stroke="none" class="finished-hours" />
       <!-- Progress circles -->
-      <circle v-if="!isFinished" cx="50" cy="50" :r="secondsRadius" fill="none" stroke="url(#countdownSecondsGradient)" stroke-width="1" :stroke-dasharray="secondsDashArray" stroke-dashoffset="0" opacity="0.8" transform="rotate(-90 50 50)" class="countdown-circle"/>
-      <circle v-if="!isFinished" cx="50" cy="50" :r="minutesRadius" fill="none" stroke="url(#countdownMinutesGradient)" stroke-width="2" :stroke-dasharray="minutesDashArray" stroke-dashoffset="0" opacity="0.85" transform="rotate(-90 50 50)" class="countdown-circle"/>
-      <circle v-if="!isFinished" cx="50" cy="50" :r="hoursRadius" fill="none" stroke="url(#countdownHoursGradient)" stroke-width="4" :stroke-dasharray="hoursDashArray" stroke-dashoffset="0" opacity="0.9" transform="rotate(-90 50 50)" class="countdown-circle"/>
+      <circle v-if="!isFinished" cx="50" cy="50" :r="secondsRadius" fill="none" stroke="url(#countdownSecondsGradient)" stroke-width="1" :stroke-dasharray="secondsDashArray" stroke-dashoffset="0" transform="rotate(-90 50 50)" class="countdown-circle"/>
+      <circle v-if="!isFinished" cx="50" cy="50" :r="minutesRadius" fill="none" stroke="url(#countdownMinutesGradient)" stroke-width="2" :stroke-dasharray="minutesDashArray" stroke-dashoffset="0" transform="rotate(-90 50 50)" class="countdown-circle"/>
+      <circle v-if="!isFinished" cx="50" cy="50" :r="hoursRadius" fill="none" stroke="url(#countdownHoursGradient)" stroke-width="4" :stroke-dasharray="hoursDashArray" stroke-dashoffset="0" transform="rotate(-90 50 50)" class="countdown-circle"/>
     </svg>
     <div class="time-display">
       <div class="time-line" :class="{ finished: isFinished }">{{ countdownHoursMinutes }}</div>
@@ -160,7 +160,7 @@ onUnmounted(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   color: #ffe4e1;
-  opacity: 0.9;
+  opacity: 1;
   font-size: 20px;
   font-weight: bold;
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
