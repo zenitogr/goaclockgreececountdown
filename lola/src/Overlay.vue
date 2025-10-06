@@ -53,6 +53,7 @@ import Clock from './components/Clock.vue'
 import Countdown from './components/Countdown.vue'
 import Modal from './components/Modal.vue'
 
+
 const isDragging = ref(false)
 const dragStartX = ref(0)
 const dragStartY = ref(0)
@@ -116,15 +117,7 @@ onMounted(async () => {
   window.addEventListener('resize', updateWindowSize)
   fetchCountdownStatus()
 
-  // Debug: Check window transparency
-  try {
-    const { getCurrentWindow } = await import('@tauri-apps/api/window')
-    const window = getCurrentWindow()
-    const isTransparent = await window.isTransparent()
-    console.log('Window is transparent:', isTransparent)
-  } catch (e) {
-    console.error('Error checking transparency:', e)
-  }
+
 })
 onMounted(() => {
   document.addEventListener('mouseup', handleMouseUp)

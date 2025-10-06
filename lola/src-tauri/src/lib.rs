@@ -57,7 +57,10 @@ fn speak_text(text: &str) -> Result<(), String> {
     if output.status.success() {
         Ok(())
     } else {
-        Err(format!("PowerShell TTS failed: {}", String::from_utf8_lossy(&output.stderr)))
+        Err(format!(
+            "PowerShell TTS failed: {}",
+            String::from_utf8_lossy(&output.stderr)
+        ))
     }
 }
 
@@ -71,7 +74,10 @@ fn get_current_time() -> TimeResponse {
 }
 
 #[tauri::command]
-fn start_countdown(seconds: u64, state: tauri::State<Arc<Mutex<CountdownState>>>) -> Result<(), String> {
+fn start_countdown(
+    seconds: u64,
+    state: tauri::State<Arc<Mutex<CountdownState>>>,
+) -> Result<(), String> {
     if seconds > 10800 {
         return Err("Duration cannot exceed 3 hours (10800 seconds)".to_string());
     }
@@ -158,12 +164,16 @@ fn get_countdown_status(state: tauri::State<Arc<Mutex<CountdownState>>>) -> Coun
 
 #[tauri::command]
 async fn set_window_position(window: tauri::Window, x: f64, y: f64) -> Result<(), String> {
-    window.set_position(PhysicalPosition::new(x, y)).map_err(|e| e.to_string())
+    window
+        .set_position(PhysicalPosition::new(x, y))
+        .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
 async fn set_window_size(window: tauri::Window, width: f64, height: f64) -> Result<(), String> {
-    window.set_size(PhysicalSize::new(width, height)).map_err(|e| e.to_string())
+    window
+        .set_size(PhysicalSize::new(width, height))
+        .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -219,7 +229,10 @@ fn resume_countdown(state: tauri::State<Arc<Mutex<CountdownState>>>) -> Result<(
 }
 
 #[tauri::command]
-fn restart_countdown(seconds: u64, state: tauri::State<Arc<Mutex<CountdownState>>>) -> Result<(), String> {
+fn restart_countdown(
+    seconds: u64,
+    state: tauri::State<Arc<Mutex<CountdownState>>>,
+) -> Result<(), String> {
     let mut s = state.lock().unwrap();
     s.start_time = Some(Utc::now());
     s.duration = seconds;
@@ -244,6 +257,8 @@ async fn close_overlay(window: tauri::Window) -> Result<(), String> {
 pub fn run() {
     let countdown_state = Arc::new(Mutex::new(CountdownState::default()));
     tauri::Builder::default()
+        .plugin(tauri_plugin_process::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
         .manage(countdown_state)
         .invoke_handler(tauri::generate_handler![

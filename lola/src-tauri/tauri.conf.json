@@ -23,7 +23,7 @@
         "decorations": false,
         "skipTaskbar": true,
         "resizable": true,
-        "x": -300,
+        "x": 300,
         "y": 0
       }
     ],
@@ -32,6 +32,7 @@
     }
   },
   "bundle": {
+    "createUpdaterArtifacts": true,
     "active": true,
     "targets": "all",
     "icon": [
@@ -41,5 +42,16 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDc1NjlEMEE1MTlBNkE3QjEKUldTeHA2WVpwZEJwZFJFNEM3VkhpRTVlenJRSnJHWS9DejlnYnVOVWNocEJ5bmkyNkN3amEvV3cK",
+      "endpoints": [
+        "https://gist.github.com/zenitogr/bd96ecdc6823e16e9c8faf35d80c79e5/raw/fdfb274ec3edb651887d61d85c6f186832da12a3/phantomtimer-latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
   }
 }
