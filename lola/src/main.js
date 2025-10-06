@@ -2,6 +2,9 @@ import { createApp } from "vue";
 import Overlay from "./Overlay.vue";
 import { check } from '@tauri-apps/plugin-updater';
 import { relaunch } from '@tauri-apps/plugin-process';
+
+createApp(Overlay).mount("#app");
+
 try {
     const update = await check();
     if (update) {
@@ -31,4 +34,3 @@ try {
         await relaunch();
     }
 } catch (error) { console.log(error) }
-createApp(Overlay).mount("#app");
