@@ -98,20 +98,38 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="countdown-container">
+  <div class="countdown-container" role="timer" :aria-label="isFinished ? 'Countdown finished' : `Countdown timer showing ${countdownHoursMinutes}:${countdownSeconds}`">
     <svg class="circles" width="100%" height="100%" viewBox="0 0 100 100">
+      <defs>
+        <linearGradient id="countdownSecondsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:0.8" />
+          <stop offset="100%" style="stop-color:#ee5a24;stop-opacity:0.6" />
+        </linearGradient>
+        <linearGradient id="countdownMinutesGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#ffa500;stop-opacity:0.9" />
+          <stop offset="100%" style="stop-color:#ff4500;stop-opacity:0.7" />
+        </linearGradient>
+        <linearGradient id="countdownHoursGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:0.8" />
+        </linearGradient>
+        <radialGradient id="finishedGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" style="stop-color:#40e0d0;stop-opacity:0.8" />
+          <stop offset="100%" style="stop-color:#6495ed;stop-opacity:0.2" />
+        </radialGradient>
+      </defs>
       <!-- Filled circles when countdown reaches zero -->
-      <circle v-if="isFinished" cx="50" cy="50" r="40" fill="white" stroke="none" class="finished-seconds" />
-      <circle v-if="isFinished" cx="50" cy="50" r="36" fill="black" stroke="none" class="finished-minutes" />
-      <circle v-if="isFinished" cx="50" cy="50" r="32" fill="white" stroke="none" class="finished-hours" />
+      <circle v-if="isFinished" cx="50" cy="50" r="40" fill="url(#finishedGlow)" stroke="none" class="finished-seconds" />
+      <circle v-if="isFinished" cx="50" cy="50" r="36" fill="rgba(15, 15, 35, 0.9)" stroke="none" class="finished-minutes" />
+      <circle v-if="isFinished" cx="50" cy="50" r="32" fill="url(#finishedGlow)" stroke="none" class="finished-hours" />
       <!-- Progress circles -->
-      <circle v-if="!isFinished" cx="50" cy="50" :r="secondsRadius" fill="none" stroke="white" stroke-width="1" :stroke-dasharray="secondsDashArray" stroke-dashoffset="0" opacity="0.5" transform="rotate(-90 50 50)"/>
-      <circle v-if="!isFinished" cx="50" cy="50" :r="minutesRadius" fill="none" stroke="white" stroke-width="2" :stroke-dasharray="minutesDashArray" stroke-dashoffset="0" opacity="0.5" transform="rotate(-90 50 50)"/>
-      <circle v-if="!isFinished" cx="50" cy="50" :r="hoursRadius" fill="none" stroke="white" stroke-width="4" :stroke-dasharray="hoursDashArray" stroke-dashoffset="0" opacity="0.5" transform="rotate(-90 50 50)"/>
+      <circle v-if="!isFinished" cx="50" cy="50" :r="secondsRadius" fill="none" stroke="url(#countdownSecondsGradient)" stroke-width="1" :stroke-dasharray="secondsDashArray" stroke-dashoffset="0" opacity="0.8" transform="rotate(-90 50 50)" class="countdown-circle"/>
+      <circle v-if="!isFinished" cx="50" cy="50" :r="minutesRadius" fill="none" stroke="url(#countdownMinutesGradient)" stroke-width="2" :stroke-dasharray="minutesDashArray" stroke-dashoffset="0" opacity="0.85" transform="rotate(-90 50 50)" class="countdown-circle"/>
+      <circle v-if="!isFinished" cx="50" cy="50" :r="hoursRadius" fill="none" stroke="url(#countdownHoursGradient)" stroke-width="4" :stroke-dasharray="hoursDashArray" stroke-dashoffset="0" opacity="0.9" transform="rotate(-90 50 50)" class="countdown-circle"/>
     </svg>
     <div class="time-display">
-      <div class="time-line">{{ countdownHoursMinutes }}</div>
-      <div class="time-line">{{ countdownSeconds }}</div>
+      <div class="time-line" :class="{ finished: isFinished }">{{ countdownHoursMinutes }}</div>
+      <div class="time-line" :class="{ finished: isFinished }">{{ countdownSeconds }}</div>
     </div>
   </div>
 </template>
@@ -121,12 +139,19 @@ onUnmounted(() => {
   position: relative;
   width: 100%;
   height: 100%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .circles {
   position: absolute;
   top: 0;
   left: 0;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.countdown-circle {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  stroke-linecap: round;
 }
 
 .time-display {
@@ -134,20 +159,36 @@ onUnmounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
-  opacity: 0.75;
+  color: #ffe4e1;
+  opacity: 0.9;
   font-size: 20px;
   font-weight: bold;
-  font-family: monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
   display: flex;
   flex-direction: column;
   align-items: center;
-  line-height: 1;
+  line-height: 1.1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5),
+               0 1px 2px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.time-line {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.time-line.finished {
+  color: #40e0d0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5),
+               0 1px 2px rgba(0, 0, 0, 0.3),
+               0 0 12px rgba(64, 224, 208, 0.5);
+  animation: finishedGlow 1.5s ease-in-out infinite alternate;
 }
 
 .finished-seconds {
   animation: pulse-seconds 4s ease-in-out infinite;
   transform-origin: 50% 50%;
+  filter: drop-shadow(0 0 20px rgba(64, 224, 208, 0.6));
 }
 
 .finished-minutes {
@@ -158,6 +199,21 @@ onUnmounted(() => {
 .finished-hours {
   animation: pulse-hours 3s ease-in-out infinite;
   transform-origin: 50% 50%;
+  filter: drop-shadow(0 0 20px rgba(64, 224, 208, 0.6));
+}
+
+@keyframes finishedGlow {
+  from {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5),
+                 0 1px 2px rgba(0, 0, 0, 0.3),
+                 0 0 12px rgba(64, 224, 208, 0.5);
+  }
+  to {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5),
+                 0 1px 2px rgba(0, 0, 0, 0.3),
+                 0 0 20px rgba(64, 224, 208, 0.8),
+                 0 0 30px rgba(64, 224, 208, 0.3);
+  }
 }
 
 @keyframes pulse-hours {
@@ -173,5 +229,24 @@ onUnmounted(() => {
 @keyframes pulse-seconds {
   0%, 100% { transform: scale(0.833); }
   50% { transform: scale(1.167); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .countdown-circle,
+  .countdown-container,
+  .time-display,
+  .time-line,
+  .finished-seconds,
+  .finished-minutes,
+  .finished-hours {
+    transition: none;
+    animation: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .time-display {
+    font-size: 18px;
+  }
 }
 </style>

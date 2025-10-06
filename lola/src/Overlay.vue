@@ -1,14 +1,32 @@
 <template>
   <div class="overlay" @mousedown="handleMouseDown" :style="{ width: overlayWidth + 'px', height: overlayHeight + 'px' }">
-    <button @click="pinTo('top-left')" class="pin-btn top-left">↖</button>
-    <button @click="pinTo('top-center')" class="pin-btn top-center">↑</button>
-    <button @click="pinTo('top-right')" class="pin-btn top-right">↗</button>
-    <button @click="pinTo('left')" class="pin-btn left">←</button>
-    <button @click="pinTo('right')" class="pin-btn right">→</button>
-    <button @click="pinTo('bottom-left')" class="pin-btn bottom-left">↙</button>
-    <button @click="pinTo('bottom-center')" class="pin-btn bottom-center">↓</button>
-    <button @click="pinTo('bottom-right')" class="pin-btn bottom-right">↘</button>
-    <button @click="settingsVisible = true" class="pin-btn settings-btn">⚙</button>
+    <button @click="pinTo('top-left')" class="pin-btn top-left" aria-label="Pin to top-left corner">
+      <ArrowUpLeft :size="16" />
+    </button>
+    <button @click="pinTo('top-center')" class="pin-btn top-center" aria-label="Pin to top-center">
+      <ArrowUp :size="16" />
+    </button>
+    <button @click="pinTo('top-right')" class="pin-btn top-right" aria-label="Pin to top-right corner">
+      <ArrowUpRight :size="16" />
+    </button>
+    <button @click="pinTo('left')" class="pin-btn left" aria-label="Pin to left side">
+      <ArrowLeft :size="16" />
+    </button>
+    <button @click="pinTo('right')" class="pin-btn right" aria-label="Pin to right side">
+      <ArrowRight :size="16" />
+    </button>
+    <button @click="pinTo('bottom-left')" class="pin-btn bottom-left" aria-label="Pin to bottom-left corner">
+      <ArrowDownLeft :size="16" />
+    </button>
+    <button @click="pinTo('bottom-center')" class="pin-btn bottom-center" aria-label="Pin to bottom-center">
+      <ArrowDown :size="16" />
+    </button>
+    <button @click="pinTo('bottom-right')" class="pin-btn bottom-right" aria-label="Pin to bottom-right corner">
+      <ArrowDownRight :size="16" />
+    </button>
+    <button @click="settingsVisible = true" class="pin-btn settings-btn" aria-label="Open settings">
+      <Settings :size="16" />
+    </button>
     <div class="clock-area">
       <Clock />
     </div>
@@ -30,6 +48,7 @@
 <script setup>
 import { invoke } from '@tauri-apps/api/core'
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ArrowUpLeft, ArrowUp, ArrowUpRight, ArrowLeft, ArrowRight, ArrowDownLeft, ArrowDown, ArrowDownRight, Settings } from 'lucide-vue-next'
 import Clock from './components/Clock.vue'
 import Countdown from './components/Countdown.vue'
 import Modal from './components/Modal.vue'
@@ -171,6 +190,8 @@ html, body {
   overflow: hidden;
   margin: 0;
   padding: 0;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f0f23 75%, #1a1a2e 100%);
+  background-attachment: fixed;
 }
 </style>
 
@@ -188,91 +209,162 @@ html, body {
 
 .pin-btn {
   position: absolute;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: white;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: #e0f6ff;
   cursor: pointer;
-  font-size: 16px;
-  padding: 3px 6px;
-  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 10;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+              0 4px 16px rgba(0, 0, 0, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .pin-btn:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: linear-gradient(135deg, rgba(64, 224, 208, 0.2), rgba(100, 149, 237, 0.2));
+  border-color: rgba(64, 224, 208, 0.4);
+  transform: scale(1.1);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4),
+              0 6px 20px rgba(0, 0, 0, 0.3),
+              inset 0 2px 0 rgba(255, 255, 255, 0.2);
+}
+
+.pin-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.pin-btn:focus-visible {
+  outline: 2px solid #40e0d0;
+  outline-offset: 2px;
 }
 
 .pin-btn.top-left {
-  top: 0;
-  left: 0;
+  top: 16px;
+  left: 16px;
 }
 
 .pin-btn.top-center {
-  top: 0;
+  top: 16px;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .pin-btn.top-right {
-  top: 0;
-  right: 0;
+  top: 16px;
+  right: 16px;
 }
 
 .pin-btn.left {
   top: 50%;
-  left: 0;
+  left: 16px;
   transform: translateY(-50%);
 }
 
 .pin-btn.right {
   top: 50%;
-  right: 0;
+  right: 16px;
   transform: translateY(-50%);
 }
 
 .pin-btn.bottom-left {
-  bottom: 0;
-  left: 0;
+  bottom: 16px;
+  left: 16px;
 }
 
 .pin-btn.bottom-center {
-  bottom: 0;
+  bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .pin-btn.bottom-right {
-  bottom: 0;
-  right: 0;
+  bottom: 16px;
+  right: 16px;
 }
 
 .pin-btn.settings-btn {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, rgba(64, 224, 208, 0.15), rgba(100, 149, 237, 0.15));
+  border-color: rgba(64, 224, 208, 0.3);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4),
+              0 6px 20px rgba(0, 0, 0, 0.3),
+              inset 0 2px 0 rgba(255, 255, 255, 0.15);
+}
+
+.pin-btn.settings-btn:hover {
+  background: linear-gradient(135deg, rgba(64, 224, 208, 0.3), rgba(100, 149, 237, 0.3));
+  border-color: rgba(64, 224, 208, 0.6);
 }
 
 .clock-area {
   position: absolute;
   top: 2vh;
-  left: 0;
+  left: 2vw;
   width: 50%;
   height: calc(100% - 2vh);
-  background: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+  background: rgba(15, 15, 35, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  margin: 16px;
+  width: calc(50% - 32px);
+  height: calc(100% - 2vh - 32px);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .countdown-area {
   position: absolute;
   top: 2vh;
-  right: 0;
+  right: 2vw;
   width: 50%;
   height: calc(100% - 2vh);
-  background: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+  background: rgba(15, 15, 35, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  margin: 16px;
+  width: calc(50% - 32px);
+  height: calc(100% - 2vh - 32px);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pin-btn,
+  .clock-area,
+  .countdown-area {
+    transition: none;
+  }
+
+  .pin-btn:hover {
+    transform: none;
+  }
+
+  .pin-btn:active {
+    transform: none;
+  }
 }
 </style>

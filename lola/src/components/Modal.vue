@@ -163,173 +163,388 @@ watch(() => props.isVisible, async (newVal) => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(15, 15, 35, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .modal-content {
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  min-width: 280px;
+  background: rgba(15, 15, 35, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: #e0f6ff;
+  padding: 24px;
+  border-radius: 24px;
+  min-width: 320px;
   max-width: 90vw;
   max-height: 90vh;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  font-size: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.4),
+              0 16px 32px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  font-size: 16px;
+  animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .settings-section {
-  margin-bottom: 10px;
+  margin-bottom: 24px;
 }
 
 .time-setting {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
-  font-size: 12px;
+  margin-bottom: 12px;
+  font-size: 14px;
 }
 
 label {
-  width: 50px;
-  margin-right: 5px;
+  width: 60px;
+  margin-right: 12px;
   flex-shrink: 0;
+  color: #e0f6ff;
+  font-weight: 500;
 }
 
 .slider {
   flex: 1;
-  margin-right: 5px;
+  margin-right: 12px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
   height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #40e0d0, #6495ed);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(64, 224, 208, 0.3);
+  transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(64, 224, 208, 0.5);
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #40e0d0, #6495ed);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(64, 224, 208, 0.3);
+  transition: all 0.2s ease;
+}
+
+.slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(64, 224, 208, 0.5);
 }
 
 .input-group {
   display: flex;
   align-items: center;
   flex: 1;
-  margin-right: 5px;
+  margin-right: 12px;
 }
 
 .input-group button {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   font-size: 16px;
   line-height: 1;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #e0f6ff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.input-group button:hover {
+  background: rgba(64, 224, 208, 0.2);
+  border-color: rgba(64, 224, 208, 0.4);
+  transform: scale(1.05);
 }
 
 .number-input {
-  width: 40px;
+  width: 50px;
   text-align: center;
-  margin: 0 2px;
-  height: 20px;
-  font-size: 12px;
+  margin: 0 8px;
+  height: 28px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #e0f6ff;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.number-input:focus {
+  border-color: #40e0d0;
+  box-shadow: 0 0 0 2px rgba(64, 224, 208, 0.2);
 }
 
 .checkbox-setting {
-  margin-bottom: 8px;
-  font-size: 12px;
+  margin-bottom: 12px;
+  font-size: 14px;
 }
 
 .checkbox-setting input[type="checkbox"] {
-  margin-right: 5px;
-  width: 14px;
-  height: 14px;
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  accent-color: #40e0d0;
+}
+
+.checkbox-setting label {
+  color: #e0f6ff;
+  cursor: pointer;
 }
 
 .buttons-section {
   display: flex;
   justify-content: space-between;
-  gap: 5px;
+  gap: 12px;
 }
 
 button {
-  padding: 6px 12px;
+  padding: 12px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 12px;
   cursor: pointer;
-  background: white;
-  color: black;
-  font-size: 16px;
+  background: linear-gradient(135deg, rgba(64, 224, 208, 0.2), rgba(100, 149, 237, 0.2));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0f6ff;
+  font-size: 14px;
+  font-weight: 500;
   flex: 1;
   min-width: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 button:hover {
-  background: rgba(255, 255, 255, 0.8);
+  background: linear-gradient(135deg, rgba(64, 224, 208, 0.3), rgba(100, 149, 237, 0.3));
+  border-color: rgba(64, 224, 208, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+button:focus-visible {
+  outline: 2px solid #40e0d0;
+  outline-offset: 2px;
 }
 
 .confirm-modal {
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
+  background: rgba(15, 15, 35, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: #e0f6ff;
+  padding: 24px;
+  border-radius: 24px;
   text-align: center;
-  font-size: 14px;
-  min-width: 200px;
+  font-size: 16px;
+  min-width: 280px;
   max-width: 80vw;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.4),
+              0 16px 32px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .confirm-modal p {
-  margin: 0 0 10px 0;
-  font-size: 12px;
+  margin: 0 0 20px 0;
+  font-size: 14px;
+  color: #e0f6ff;
 }
 
 .confirm-buttons {
-  margin-top: 10px;
+  margin-top: 20px;
   display: flex;
   justify-content: space-around;
-  gap: 5px;
+  gap: 12px;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-content,
+  .confirm-modal {
+    animation: none;
+  }
+
+  button,
+  .input-group button,
+  .slider::-webkit-slider-thumb,
+  .slider::-moz-range-thumb {
+    transition: none;
+  }
+
+  button:hover,
+  .input-group button:hover {
+    transform: none;
+  }
+
+  .slider::-webkit-slider-thumb:hover,
+  .slider::-moz-range-thumb:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 480px), (max-height: 320px) {
+  .modal-content {
+    padding: 20px;
+    min-width: 300px;
+    font-size: 14px;
+  }
+
+  .settings-section {
+    margin-bottom: 20px;
+  }
+
+  .time-setting {
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+
+  label {
+    width: 55px;
+    font-size: 13px;
+  }
+
+  .slider {
+    height: 6px;
+  }
+
+  .slider::-webkit-slider-thumb,
+  .slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+  }
+
+  .number-input {
+    width: 45px;
+    height: 26px;
+    font-size: 13px;
+  }
+
+  .input-group button {
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+  }
+
+  button {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .confirm-modal {
+    padding: 20px;
+    min-width: 260px;
+    font-size: 14px;
+  }
+
+  .confirm-modal p {
+    font-size: 13px;
+  }
 }
 
 @media (max-width: 320px), (max-height: 240px) {
   .modal-content {
-    padding: 8px;
-    min-width: 260px;
+    padding: 16px;
+    min-width: 280px;
     font-size: 12px;
   }
 
+  .settings-section {
+    margin-bottom: 16px;
+  }
+
   .time-setting {
-    margin-bottom: 6px;
-    font-size: 11px;
+    margin-bottom: 8px;
+    font-size: 12px;
   }
 
   label {
-    width: 45px;
-    font-size: 11px;
+    width: 50px;
+    font-size: 12px;
   }
 
   .slider {
+    height: 6px;
+  }
+
+  .slider::-webkit-slider-thumb,
+  .slider::-moz-range-thumb {
+    width: 16px;
     height: 16px;
   }
 
   .number-input {
-    width: 35px;
-    height: 18px;
-    font-size: 11px;
+    width: 40px;
+    height: 24px;
+    font-size: 12px;
   }
 
   .input-group button {
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
     font-size: 12px;
   }
 
   button {
-    padding: 5px 10px;
-    font-size: 11px;
+    padding: 8px 12px;
+    font-size: 12px;
   }
 
   .confirm-modal {
-    padding: 8px;
+    padding: 16px;
+    min-width: 240px;
     font-size: 12px;
   }
 
   .confirm-modal p {
-    font-size: 11px;
+    font-size: 12px;
   }
 }
 </style>
